@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Gorsovet.iml" filepath="$PROJECT_DIR$/.idea/Gorsovet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/TreeChartPlugin.iml" filepath="$PROJECT_DIR$/.idea/TreeChartPlugin.iml" />
     </modules>
   </component>
 </project>
