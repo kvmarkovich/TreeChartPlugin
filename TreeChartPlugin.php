@@ -132,6 +132,7 @@ class TreeChartPlugin
         add_filter('template_include', array($this, 'view_project_template'));
 
         // Register hooks that are fired when the plugin is activated, deactivated, and uninstalled, respectively.
+        register_activation_hook(__FILE__, array($this, 'activate'));
         register_deactivation_hook(__FILE__, array($this, 'deactivate'));
 
         // Add your templates to this array.
@@ -241,7 +242,8 @@ class TreeChartPlugin
 
         foreach ($post_type_config['metas'] as $meta) {
 
-            $meta_field_name = "_" . $meta['name'];
+            $meta_prefix = "_";
+            $meta_field_name = $meta_prefix . $meta['name'];
             // коррекция данных
             $data = sanitize_text_field($_POST[$meta_field_name]);
 
@@ -314,7 +316,7 @@ class TreeChartPlugin
                     'name' => _x($s['title'], $s['description']),
                 ),
                 'public' => true,
-                'supports' => array('title', 'thumbnail', 'custom-fields', 'comments', 'revisions'),
+                'supports' => array('title', 'thumbnail', 'comments', 'revisions'),
                 'menu_icon' => $s['icon']
             ));
         }
@@ -408,6 +410,38 @@ class TreeChartPlugin
 // end view_project_template
 
     /* --------------------------------------------*
+     * activate the plugin
+     * --------------------------------------------- */
+
+    static function activate($network_wide)
+    {
+/*        $post_type = 'gorsovet';
+        $myposts = get_posts(array(
+            'post_type' => $post_type,
+            'numberposts' => 100,
+            'post_status' => 'publish',
+//            'meta_key' => 'parent_id',
+//            'orderby' => 'meta_value_num',
+            'order' => 'ASC'));
+
+        $meta_prefix = "_";
+        foreach ($myposts as $post) {
+            $content = $post->post_content;
+            $meta = get_post_meta($post->ID);
+            foreach (self::$config['submenus'][$post_type]['metas'] as $meta_name) {
+                if (array_key_exists($meta_name, $meta)) {
+                    $meta[$meta_prefix . $meta_name] = $meta[$meta_name];
+                    unset($meta[$meta_name]);
+                }
+                wp_update_post($post->ID, )
+            }
+        }*/
+
+    }
+
+// end activate
+
+    /* --------------------------------------------*
      * deactivate the plugin
      * --------------------------------------------- */
 
@@ -472,7 +506,7 @@ class TreeChartPlugin
         foreach ($myposts as $post) {
             $content = $post->post_content;
             $meta = get_post_meta($post->ID);
-            if(is_null($meta["${meta_prefix}id"])) continue;
+            if (is_null($meta["${meta_prefix}id"])) continue;
             $feat_image = wp_get_attachment_url(get_post_thumbnail_id($post->ID));
             if ($feat_image) {
                 $meta['feat_image'] = $feat_image;
@@ -483,7 +517,7 @@ class TreeChartPlugin
 //        $convertToTree = $this->treeToSortedArray($this->convertToTree($metas, "${meta_prefix}id", "${meta_prefix}parent_id"));
 
         foreach ($metas as $key => $row) {
-            $id[$key]  = $row["${meta_prefix}id"];
+            $id[$key] = $row["${meta_prefix}id"];
             $parent_id[$key] = $row["${meta_prefix}parent_id"];
         }
 
